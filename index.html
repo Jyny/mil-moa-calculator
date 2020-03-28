@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		.container {
+			border: groove;
+			margin: 1%;
+			padding: 1%;
+		}
+	</style>
+</head>
+<body>
+	<h1>Sniper Calculator</h1>
+
+	<div class="container">
+		<h2>Measurement Units and systems</h2>
+		<input  type="radio" name="mus" id="si" value="si">
+		<label for="si">Meter, Centimeter</label>
+		<input  type="radio" name="mus" id="en" value="en">
+		<label for="en">Yard, Inch</label>
+	</div>
+
+	<div class="container">
+		<h2>MIL, MOA</h2>
+		<label id="subtension-label"></label>
+		<input id="subtension">
+		<label id="range-label"></label>
+		<input id="range">
+		<button id="mil-moa-cal" type="button">Calculate</button>
+		<br/>
+		<b>Milliradian (mrad, MIL) : </b>
+		<code id="mil"> </code>
+		<br/>
+		<b>Minute of Angle (MOA)  : </b>
+		<code id="moa"> </code>
+	</div>
+
+
+	<script type="text/javascript">
+		window.onload = function(){
+			// user select
+			document.getElementById('si').checked = true
+			// value change
+			musChange("si")
+		}
+
+		document.getElementById('si').addEventListener('change', function () {
+			musChange("si")
+		});
+
+		document.getElementById('en').addEventListener('change', function () {
+			musChange("en")
+		});
+
+		document.getElementById('mil-moa-cal').addEventListener('click', function () {
+			range = document.getElementById('range').value
+			subtension = document.getElementById('subtension').value
+			if (mus == "si") {
+				document.getElementById('mil').innerHTML = round5(calmil(subtension, range))
+				document.getElementById('moa').innerHTML = round5(mil2moa(calmil(subtension, range)))
+			}
+
+			if (mus == "en") {
+				document.getElementById('mil').innerHTML = round5(moa2mil(calmoa(subtension, range)))
+				document.getElementById('moa').innerHTML = round5(calmoa(subtension, range))
+			}
+		});
+
+		function musChange(mus){
+			window.mus = mus
+			if (mus == "si") {
+				document.getElementById('subtension-label').innerHTML = "Subtension (cm) "
+				document.getElementById('range-label').innerHTML = "Range (m) "
+				document.getElementById('subtension').value = round5(in2cm(document.getElementById('subtension').value))
+				document.getElementById('range').value = round5(yd2m(document.getElementById('range').value))
+			}
+
+			if (mus == "en") {
+				document.getElementById('subtension-label').innerHTML = "Subtension (in) "
+				document.getElementById('range-label').innerHTML = "Range (yd) "
+				document.getElementById('subtension').value = round5(cm2in(document.getElementById('subtension').value))
+				document.getElementById('range').value = round5(m2yd(document.getElementById('range').value))
+			}
+		}
+
+		function calmil (subtension, range) {
+			return Math.atan(subtension/(range*100*2))*2*1000
+		}
+
+		function calmoa (subtension, range) {
+			return Math.atan(subtension/(range*36*2))*2*60*(180/Math.PI)
+		}
+
+		function mil2moa (mil) {
+			return (mil*54)/(5*Math.PI)
+		}
+
+		function moa2mil (moa) {
+			return (moa*5*Math.PI)/54
+		}
+
+		function cm2in (cm) {
+			return cm*0.393700787
+		}
+
+		function in2cm (inch) {
+			return inch*2.54
+		}
+
+		function m2yd (m) {
+			return m*1.0936133
+		}
+
+		function yd2m (yd) {
+			return yd*0.9144
+		}
+
+		function round5 (x) {
+			return Math.round(x*100000)/100000
+		}
+
+	</script>
+</body>
+</html>
