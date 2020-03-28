@@ -10,85 +10,182 @@
 	</style>
 </head>
 <body>
-	<h1>Sniper Calculator</h1>
-
 	<div class="container">
 		<h2>Measurement Units and systems</h2>
-		<input  type="radio" name="mus" id="si" value="si">
-		<label for="si">Meter, Centimeter</label>
-		<input  type="radio" name="mus" id="en" value="en">
-		<label for="en">Yard, Inch</label>
+		<form>
+			<input  type="radio" name="mus" id="si" value="si">
+			<label for="si">Meter, Centimeter</label>
+			<input  type="radio" name="mus" id="en" value="en">
+			<label for="en">Yard, Inch</label>
+			<br/>
+			<input  type="radio" name="aus" id="mil" value="mil">
+			<label for="mil">Milliradian (mrad, MIL)</label>
+			<input  type="radio" name="aus" id="moa" value="mil">
+			<label for="moa">Minute of Angle (MOA)</label>
+		</form>
 	</div>
 
 	<div class="container">
-		<h2>MIL, MOA</h2>
-		<label id="subtension-label"></label>
-		<input id="subtension">
-		<label id="range-label"></label>
-		<input id="range">
-		<button id="mil-moa-cal" type="button">Calculate</button>
+		<h2>Distance</h2>
+		<form>
+			<label id="target-length-label"></label>
+			<input id="target-length">
+			<br/>
+
+			<label id="target-subtension-label"></label>
+			<input id="target-subtension">
+			<br/>
+
+			<button id="target-distance-cal" type="button">Calculate</button>
+			<br/><br/>
+
+			<b id="target-distance-label"></b>
+			<code id="target-distance"></code>
+		</form>
+	</div>
+
+	<div class="container">
+		<h2>Precision</h2>
+
+		<label id="precision-grouping-label"></label>
+		<input id="precision-grouping">
 		<br/>
-		<b>Milliradian (mrad, MIL) : </b>
-		<code id="mil"> </code>
+
+		<label id="precision-range-label"></label>
+		<input id="precision-range">
 		<br/>
-		<b>Minute of Angle (MOA)  : </b>
-		<code id="moa"> </code>
+
+		<button id="precision-angle-cal" type="button">Calculate</button>
+		<br/><br/>
+
+		<b id="precision-angle-label"></b>
+		<code id="precision-angle"></code>
 	</div>
 
 
 	<script type="text/javascript">
 		window.onload = function(){
+			// init value
+			document.getElementById("target-length").value = 0
+			document.getElementById("target-subtension").value = 0
+			document.getElementById("precision-grouping").value = 0
+			document.getElementById("precision-range").value = 0
 			// user select
-			document.getElementById('si').checked = true
+			document.getElementById("si").checked = true
+			document.getElementById("mil").checked = true
 			// value change
 			musChange("si")
+			ausChange("mil")
 		}
 
-		document.getElementById('si').addEventListener('change', function () {
+		document.getElementById("si").addEventListener("change", function () {
 			musChange("si")
 		});
 
-		document.getElementById('en').addEventListener('change', function () {
+		document.getElementById("en").addEventListener("change", function () {
 			musChange("en")
 		});
 
-		document.getElementById('mil-moa-cal').addEventListener('click', function () {
-			range = document.getElementById('range').value
-			subtension = document.getElementById('subtension').value
-			if (mus == "si") {
-				document.getElementById('mil').innerHTML = round5(calmil(subtension, range))
-				document.getElementById('moa').innerHTML = round5(mil2moa(calmil(subtension, range)))
-			}
+		document.getElementById("mil").addEventListener("change", function () {
+			ausChange("mil")
+		});
 
-			if (mus == "en") {
-				document.getElementById('mil').innerHTML = round5(moa2mil(calmoa(subtension, range)))
-				document.getElementById('moa').innerHTML = round5(calmoa(subtension, range))
-			}
+		document.getElementById("moa").addEventListener("change", function () {
+			ausChange("moa")
 		});
 
 		function musChange(mus){
 			window.mus = mus
 			if (mus == "si") {
-				document.getElementById('subtension-label').innerHTML = "Subtension (cm) "
-				document.getElementById('range-label').innerHTML = "Range (m) "
-				document.getElementById('subtension').value = round5(in2cm(document.getElementById('subtension').value))
-				document.getElementById('range').value = round5(yd2m(document.getElementById('range').value))
+				document.getElementById("target-length-label").innerHTML = "Target Length (cm) "
+				document.getElementById("target-length").value = roundf5(in2cm(document.getElementById("target-length").value))
+				document.getElementById("target-distance-label").innerHTML = "Distance (m) : "
+				document.getElementById("target-distance").innerHTML = roundf5(yd2m(document.getElementById("target-distance").innerHTML))
+				document.getElementById("precision-grouping-label").innerHTML = "Grouping (cm) "
+				document.getElementById("precision-grouping").value = roundf5(in2cm(document.getElementById("precision-grouping").value))
+				document.getElementById("precision-range-label").innerHTML = "Range (m) "
+				document.getElementById("precision-range").value = roundf5(yd2m(document.getElementById("precision-range").value))
 			}
 
 			if (mus == "en") {
-				document.getElementById('subtension-label').innerHTML = "Subtension (in) "
-				document.getElementById('range-label').innerHTML = "Range (yd) "
-				document.getElementById('subtension').value = round5(cm2in(document.getElementById('subtension').value))
-				document.getElementById('range').value = round5(m2yd(document.getElementById('range').value))
+				document.getElementById("target-length-label").innerHTML = "Target Length (inch) "
+				document.getElementById("target-length").value = roundf5(cm2in(document.getElementById("target-length").value))
+				document.getElementById("target-distance-label").innerHTML = "Distance (yard) : "
+				document.getElementById("target-distance").innerHTML = roundf5(m2yd(document.getElementById("target-distance").innerHTML))
+				document.getElementById("precision-grouping-label").innerHTML = "Grouping (in) "
+				document.getElementById("precision-grouping").value = roundf5(cm2in(document.getElementById("precision-grouping").value))
+				document.getElementById("precision-range-label").innerHTML = "Range (yd) "
+				document.getElementById("precision-range").value = roundf5(m2yd(document.getElementById("precision-range").value))
 			}
 		}
 
-		function calmil (subtension, range) {
-			return Math.atan(subtension/(range*100*2))*2*1000
+		function ausChange(aus){
+			window.aus = aus
+			if (aus == "mil") {
+				document.getElementById("target-subtension-label").innerHTML = "Target Subtension (MIL) "
+				document.getElementById("target-subtension").value = roundf5(moa2mil(document.getElementById("target-subtension").value))
+				document.getElementById("precision-angle-label").innerHTML = "Milliradian (mrad, MIL) : "
+				document.getElementById("precision-angle").innerHTML = roundf5(moa2mil(document.getElementById("precision-angle").innerHTML))
+			}
+
+			if (aus == "moa") {
+				document.getElementById("target-subtension-label").innerHTML = "Target Subtension (MOA) "
+				document.getElementById("target-subtension").value = roundf5(mil2moa(document.getElementById("target-subtension").value))
+				document.getElementById("precision-angle-label").innerHTML = "Minute of Angle (MOA)  : "
+				document.getElementById("precision-angle").innerHTML = roundf5(mil2moa(document.getElementById("precision-angle").innerHTML))
+			}
 		}
 
-		function calmoa (subtension, range) {
-			return Math.atan(subtension/(range*36*2))*2*60*(180/Math.PI)
+		document.getElementById("precision-angle-cal").addEventListener("click", function () {
+			document.getElementById("precision-angle").innerHTML = roundf5(calprecision(
+				document.getElementById("precision-grouping").value,
+				document.getElementById("precision-range").value
+			))
+		});
+
+		document.getElementById("target-distance-cal").addEventListener("click", function () {
+			document.getElementById("target-distance").innerHTML = roundf5(caldistance(
+				document.getElementById("target-length").value,
+				document.getElementById("target-subtension").value
+			))
+		});
+
+		function calprecision (grouping, range) {
+			if (window.mus == "si") {
+				if (window.aus == "mil") {
+					return Math.atan(grouping/(range*100*2))*2*1000
+				}
+				if (window.aus == "moa") {
+					return Math.atan(grouping/(range*100*2))*2*60*(180/Math.PI)
+				}
+			}
+			if (window.mus == "en") {
+				if (window.aus == "mil") {
+					return Math.atan(grouping/(range*36*2))*2*1000
+				}
+				if (window.aus == "moa") {
+					return Math.atan(grouping/(range*36*2))*2*60*(180/Math.PI)
+				}
+			}
+		}
+
+		function caldistance (length, subtension) {
+			if (window.mus == "si") {
+				if (window.aus == "mil") {
+					return length/(Math.tan(subtension/(2*1000))*100*2)
+				}
+				if (window.aus == "moa") {
+					return length/(Math.tan(subtension/(2*60*(180/Math.PI)))*100*2)
+				}
+			}
+			if (window.mus == "en") {
+				if (window.aus == "mil") {
+					return length/(Math.tan(subtension/(2*1000))*36*2)
+				}
+				if (window.aus == "moa") {
+					return length/(Math.tan(subtension/(2*60*(180/Math.PI)))*36*2)
+				}
+			}
 		}
 
 		function mil2moa (mil) {
@@ -115,7 +212,7 @@
 			return yd*0.9144
 		}
 
-		function round5 (x) {
+		function roundf5 (x) {
 			return Math.round(x*100000)/100000
 		}
 
