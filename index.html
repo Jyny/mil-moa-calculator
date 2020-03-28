@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style type="text/css">
+		body {
+			margin: auto;
+			font-family: Helvetica;
+		}
+
 		.container {
 			border: groove;
 			margin: 1%;
 			padding: 1%;
+		}
+
+		h2 {
+			margin-top: 0;
 		}
 	</style>
 </head>
@@ -29,11 +39,11 @@
 		<h2>Distance</h2>
 		<form>
 			<label id="target-length-label"></label>
-			<input id="target-length">
+			<input type="number" id="target-length">
 			<br/>
 
 			<label id="target-subtension-label"></label>
-			<input id="target-subtension">
+			<input type="number" id="target-subtension">
 			<br/>
 
 			<button id="target-distance-cal" type="button">Calculate</button>
@@ -48,11 +58,11 @@
 		<h2>Precision</h2>
 
 		<label id="precision-grouping-label"></label>
-		<input id="precision-grouping">
+		<input type="number" id="precision-grouping">
 		<br/>
 
 		<label id="precision-range-label"></label>
-		<input id="precision-range">
+		<input type="number" id="precision-range">
 		<br/>
 
 		<button id="precision-angle-cal" type="button">Calculate</button>
