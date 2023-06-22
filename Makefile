@@ -3,7 +3,7 @@
 all: build
 
 serve: build
-	go run server/server.go go -addr=0.0.0.0:8080 -root=build
+	go run server/server.go -addr=0.0.0.0:8080 -root=build
 
 build: clean build/app.wasm build/wasm_exec.js build/index.html 
 

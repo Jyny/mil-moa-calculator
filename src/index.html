@@ -168,44 +168,6 @@
 			))
 		});
 
-		function calprecision (grouping, range) {
-			if (window.mus == "si") {
-				if (window.aus == "mil") {
-					return Math.atan(grouping/(range*100*2))*2*1000
-				}
-				if (window.aus == "moa") {
-					return Math.atan(grouping/(range*100*2))*2*60*(180/Math.PI)
-				}
-			}
-			if (window.mus == "en") {
-				if (window.aus == "mil") {
-					return Math.atan(grouping/(range*36*2))*2*1000
-				}
-				if (window.aus == "moa") {
-					return Math.atan(grouping/(range*36*2))*2*60*(180/Math.PI)
-				}
-			}
-		}
-
-		function caldistance (length, subtension) {
-			if (window.mus == "si") {
-				if (window.aus == "mil") {
-					return length/(Math.tan(subtension/(2*1000))*100*2)
-				}
-				if (window.aus == "moa") {
-					return length/(Math.tan(subtension/(2*60*(180/Math.PI)))*100*2)
-				}
-			}
-			if (window.mus == "en") {
-				if (window.aus == "mil") {
-					return length/(Math.tan(subtension/(2*1000))*36*2)
-				}
-				if (window.aus == "moa") {
-					return length/(Math.tan(subtension/(2*60*(180/Math.PI)))*36*2)
-				}
-			}
-		}
-
 		function mil2moa (mil) {
 			return (mil*54)/(5*Math.PI)
 		}

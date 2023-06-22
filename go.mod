@@ -1,3 +1,3 @@
-module github.com/Jyny/mil-moa-calculator
+module mil-moa-calculator
 
 go 1.20
