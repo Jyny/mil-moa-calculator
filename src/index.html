@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style type="text/css">
 		body {
@@ -18,6 +19,13 @@
 			margin-top: 0;
 		}
 	</style>
+	<script src="wasm_exec.js"></script>
+	<script>
+		const app = new Go();
+		WebAssembly.instantiateStreaming(fetch("app.wasm"), app.importObject).then((obj) => {
+			app.run(obj.instance);
+		});
+	</script>
 </head>
 <body>
 	<div class="container">
