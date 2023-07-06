@@ -18,18 +18,12 @@ func init() {
 }
 
 func main() {
-	defer func() {
-		if r := recover(); r != nil {
-			log.Println("recovered", r)
-			main()
-		}
-	}()
-
 	window.Set("calprecision", js.FuncOf(calPrecision))
 	window.Set("caldistance", js.FuncOf(calDistance))
 
 	select {}
 }
+
 func calPrecision(this js.Value, args []js.Value) interface{} {
 	if len(args) < 2 {
 		log.Println("args is not enough")

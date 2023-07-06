@@ -5,7 +5,7 @@ all: build
 serve: build
 	go run server/server.go -addr=0.0.0.0:8080 -root=build
 
-build: clean build/app.wasm build/wasm_exec.js build/index.html 
+build: clean build/app.wasm build/wasm_exec.js build/index.html
 
 build/app.wasm: app/app.go
 	GOOS=js GOARCH=wasm go build -o build/app.wasm app/app.go
