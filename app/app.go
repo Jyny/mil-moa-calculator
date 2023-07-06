@@ -31,6 +31,11 @@ func main() {
 	select {}
 }
 func calPrecision(this js.Value, args []js.Value) interface{} {
+	if len(args) < 2 {
+		log.Println("args is not enough")
+		return nil
+	}
+
 	x, err := strconv.ParseFloat(args[0].String(), 64)
 	if err != nil {
 		log.Println(err)
@@ -50,6 +55,11 @@ func calPrecision(this js.Value, args []js.Value) interface{} {
 }
 
 func calDistance(this js.Value, args []js.Value) interface{} {
+	if len(args) < 2 {
+		log.Println("args is not enough")
+		return nil
+	}
+
 	x, err := strconv.ParseFloat(args[0].String(), 64)
 	if err != nil {
 		log.Println(err)
